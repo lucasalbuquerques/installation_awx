@@ -60,7 +60,7 @@ Please note that deploying from `HEAD` (or the latest commit) is **not** stable,
 
 For more on how to clone the repo, view [git clone help](https://git-scm.com/docs/git-clone).
 
-Once you have a local copy, run commands within the root of the project tree.
+Once you have a local copy, run the commands in the following sections from the root of the project tree.
 
 ### AWX branding
 
@@ -497,7 +497,7 @@ Before starting the install process, review the [inventory](./installer/inventor
 
 *docker_compose_dir*
 
-> When using docker-compose, the `docker-compose.yml` file will be created there (default `/tmp/awxcompose`).
+> When using docker-compose, the `docker-compose.yml` file will be created there (default `~/.awx/awxcompose`).
 
 *custom_venv_dir*
 

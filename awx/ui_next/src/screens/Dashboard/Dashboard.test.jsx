@@ -7,6 +7,9 @@ import { DashboardAPI } from '../../api';
 import Dashboard from './Dashboard';
 
 jest.mock('../../api');
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+}));
 
 describe('<Dashboard />', () => {
   let pageWrapper;
@@ -35,9 +38,12 @@ describe('<Dashboard />', () => {
 
   test('renders template list when the active tab is changed', async () => {
     expect(pageWrapper.find('DashboardTemplateList').length).toBe(0);
-    pageWrapper
-      .find('button[aria-label="Recent Templates list tab"]')
-      .simulate('click');
+    await act(async () => {
+      pageWrapper
+        .find('button[aria-label="Recent Templates list tab"]')
+        .simulate('click');
+    });
+    pageWrapper.update();
     expect(pageWrapper.find('DashboardTemplateList').length).toBe(1);
   });
 

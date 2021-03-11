@@ -18,9 +18,9 @@ import {
 
 import useRequest from '../../util/useRequest';
 import { DashboardAPI } from '../../api';
-import Breadcrumbs from '../../components/Breadcrumbs';
+import ScreenHeader from '../../components/ScreenHeader';
 import JobList from '../../components/JobList';
-
+import ContentLoading from '../../components/ContentLoading';
 import LineChart from './shared/LineChart';
 import Count from './shared/Count';
 import DashboardTemplateList from './shared/DashboardTemplateList';
@@ -62,6 +62,7 @@ function Dashboard({ i18n }) {
   const [activeTabId, setActiveTabId] = useState(0);
 
   const {
+    isLoading,
     result: { jobGraphData, countData },
     request: fetchDashboardGraph,
   } = useRequest(
@@ -105,10 +106,21 @@ function Dashboard({ i18n }) {
   useEffect(() => {
     fetchDashboardGraph();
   }, [fetchDashboardGraph, periodSelection, jobTypeSelection]);
-
+  if (isLoading) {
+    return (
+      <PageSection>
+        <Card>
+          <ContentLoading />
+        </Card>
+      </PageSection>
+    );
+  }
   return (
     <Fragment>
-      <Breadcrumbs breadcrumbConfig={{ '/home': i18n._(t`Dashboard`) }} />
+      <ScreenHeader
+        streamType="all"
+        breadcrumbConfig={{ '/home': i18n._(t`Dashboard`) }}
+      />
       <PageSection>
         <Counts>
           <Count
