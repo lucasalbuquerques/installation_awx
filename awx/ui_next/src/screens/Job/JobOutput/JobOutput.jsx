@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
-import { I18n } from '@lingui/react';
+import { withI18n } from '@lingui/react';
 import { t } from '@lingui/macro';
 import styled from 'styled-components';
 import {
@@ -170,11 +170,7 @@ const OutputFooter = styled.div`
 
 let ws;
 function connectJobSocket({ type, id }, onMessage) {
-  ws = new WebSocket(
-    `${window.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${
-      window.location.host
-    }/websocket/`
-  );
+  ws = new WebSocket(`wss://${window.location.host}/websocket/`);
 
   ws.onopen = () => {
     const xrftoken = `; ${document.cookie}`
@@ -518,7 +514,7 @@ class JobOutput extends Component {
   }
 
   render() {
-    const { job } = this.props;
+    const { job, i18n } = this.props;
 
     const {
       contentError,
@@ -596,21 +592,15 @@ class JobOutput extends Component {
           </OutputWrapper>
         </CardBody>
         {deletionError && (
-          <>
-            <I18n>
-              {({ i18n }) => (
-                <AlertModal
-                  isOpen={deletionError}
-                  variant="danger"
-                  onClose={() => this.setState({ deletionError: null })}
-                  title={i18n._(t`Job Delete Error`)}
-                  label={i18n._(t`Job Delete Error`)}
-                >
-                  <ErrorDetail error={deletionError} />
-                </AlertModal>
-              )}
-            </I18n>
-          </>
+          <AlertModal
+            isOpen={deletionError}
+            variant="danger"
+            onClose={() => this.setState({ deletionError: null })}
+            title={i18n._(t`Job Delete Error`)}
+            label={i18n._(t`Job Delete Error`)}
+          >
+            <ErrorDetail error={deletionError} />
+          </AlertModal>
         )}
       </Fragment>
     );
@@ -618,4 +608,4 @@ class JobOutput extends Component {
 }
 
 export { JobOutput as _JobOutput };
-export default withRouter(JobOutput);
+export default withI18n()(withRouter(JobOutput));

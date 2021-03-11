@@ -2,10 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { withI18n } from '@lingui/react';
 import { t } from '@lingui/macro';
-import { useLocation } from 'react-router-dom';
-import { func, shape, arrayOf } from 'prop-types';
+import { func, shape, object, arrayOf } from 'prop-types';
 import { Form } from '@patternfly/react-core';
-import { InstanceGroup } from '../../../types';
 import { VariablesField } from '../../../components/CodeMirrorInput';
 import ContentError from '../../../components/ContentError';
 import ContentLoading from '../../../components/ContentLoading';
@@ -15,10 +13,6 @@ import {
   FormColumnLayout,
   FormFullWidthLayout,
 } from '../../../components/FormLayout';
-import {
-  toHostFilter,
-  toSearchParams,
-} from '../../../components/Lookup/shared/HostFilterUtils';
 import HostFilterLookup from '../../../components/Lookup/HostFilterLookup';
 import InstanceGroupsLookup from '../../../components/Lookup/InstanceGroupsLookup';
 import OrganizationLookup from '../../../components/Lookup/OrganizationLookup';
@@ -114,17 +108,9 @@ function SmartInventoryForm({
   onCancel,
   submitError,
 }) {
-  const { search } = useLocation();
-  const queryParams = new URLSearchParams(search);
-  const hostFilterFromParams = queryParams.get('host_filter');
-
   const initialValues = {
     description: inventory.description || '',
-    host_filter:
-      inventory.host_filter ||
-      (hostFilterFromParams
-        ? toHostFilter(toSearchParams(hostFilterFromParams))
-        : ''),
+    host_filter: inventory.host_filter || '',
     instance_groups: instanceGroups || [],
     kind: 'smart',
     name: inventory.name || '',
@@ -182,7 +168,7 @@ function SmartInventoryForm({
 }
 
 SmartInventoryForm.propTypes = {
-  instanceGroups: arrayOf(InstanceGroup),
+  instanceGroups: arrayOf(object),
   inventory: shape({}),
   onCancel: func.isRequired,
   onSubmit: func.isRequired,

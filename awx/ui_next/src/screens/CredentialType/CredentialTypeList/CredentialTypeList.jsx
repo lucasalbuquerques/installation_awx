@@ -18,7 +18,7 @@ import DatalistToolbar from '../../../components/DataListToolbar';
 
 import CredentialTypeListItem from './CredentialTypeListItem';
 
-const QS_CONFIG = getQSConfig('credential-type', {
+const QS_CONFIG = getQSConfig('credential_type', {
   page: 1,
   page_size: 20,
   managed_by_tower: false,

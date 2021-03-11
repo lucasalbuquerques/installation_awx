@@ -6,6 +6,7 @@
     password: "{{ docker_registry_password }}"
     reauthorize: true
   when: docker_registry is defined and docker_registry_password is defined
+  delegate_to: localhost
 
 - name: Remove local images to ensure proper push behavior
   block:
@@ -14,6 +15,7 @@
         name: "{{ docker_registry }}/{{ docker_registry_repository }}/{{ awx_image }}"
         tag: "{{ awx_version }}"
         state: absent
+  delegate_to: localhost
 
 - name: Tag and Push Container Images
   block:
@@ -26,6 +28,7 @@
       with_items:
         - "latest"
         - "{{ awx_version }}"
+  delegate_to: localhost
 
 - name: Set full image path for Registry
   set_fact:

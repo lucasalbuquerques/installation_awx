@@ -22,11 +22,10 @@ async function getUsers() {
   };
 }
 
-UsersAPI.readDetail.mockResolvedValue({ data: mockDetails });
-UsersAPI.read.mockImplementation(getUsers);
-
 describe('<User />', () => {
   test('initially renders successfully', async () => {
+    UsersAPI.readDetail.mockResolvedValue({ data: mockDetails });
+    UsersAPI.read.mockImplementation(getUsers);
     const history = createMemoryHistory({
       initialEntries: ['/users/1'],
     });
@@ -50,6 +49,8 @@ describe('<User />', () => {
   });
 
   test('tabs shown for users', async () => {
+    UsersAPI.readDetail.mockResolvedValue({ data: mockDetails });
+    UsersAPI.read.mockImplementation(getUsers);
     const history = createMemoryHistory({
       initialEntries: ['/users/1'],
     });
@@ -80,7 +81,9 @@ describe('<User />', () => {
     expect(wrapper.find('Tabs TabButton').length).toEqual(6);
   });
 
-  test('should not show Tokens tab', async () => {
+  test('should not now Tokens tab', async () => {
+    UsersAPI.readDetail.mockResolvedValue({ data: mockDetails });
+    UsersAPI.read.mockImplementation(getUsers);
     const history = createMemoryHistory({
       initialEntries: ['/users/1'],
     });

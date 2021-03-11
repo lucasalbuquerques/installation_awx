@@ -11,7 +11,7 @@ describe('OtherPromptsStep', () => {
       wrapper = mountWithContexts(
         <Formik initialValues={{ job_type: 'run' }}>
           <OtherPromptsStep
-            launchConfig={{
+            config={{
               ask_job_type_on_launch: true,
             }}
           />
@@ -34,7 +34,7 @@ describe('OtherPromptsStep', () => {
       wrapper = mountWithContexts(
         <Formik>
           <OtherPromptsStep
-            launchConfig={{
+            config={{
               ask_limit_on_launch: true,
             }}
           />
@@ -54,7 +54,7 @@ describe('OtherPromptsStep', () => {
       wrapper = mountWithContexts(
         <Formik>
           <OtherPromptsStep
-            launchConfig={{
+            config={{
               ask_scm_branch_on_launch: true,
             }}
           />
@@ -74,7 +74,7 @@ describe('OtherPromptsStep', () => {
       wrapper = mountWithContexts(
         <Formik initialValues={{ verbosity: '' }}>
           <OtherPromptsStep
-            launchConfig={{
+            config={{
               ask_verbosity_on_launch: true,
             }}
           />
@@ -94,7 +94,7 @@ describe('OtherPromptsStep', () => {
       wrapper = mountWithContexts(
         <Formik initialValues={{ diff_mode: true }}>
           <OtherPromptsStep
-            launchConfig={{
+            config={{
               ask_diff_mode_on_launch: true,
             }}
           />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Switch, Route, useParams } from 'react-router-dom';
+import { Switch, Route, useParams, useLocation } from 'react-router-dom';
 import { withI18n } from '@lingui/react';
 import { t } from '@lingui/macro';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from '../../api';
@@ -12,7 +12,8 @@ import { SurveyList, SurveyQuestionAdd, SurveyQuestionEdit } from './Survey';
 function TemplateSurvey({ template, canEdit, i18n }) {
   const [surveyEnabled, setSurveyEnabled] = useState(template.survey_enabled);
 
-  const { templateType, id: templateId } = useParams();
+  const { templateType } = useParams();
+  const location = useLocation();
 
   const {
     result: survey,
@@ -24,31 +25,30 @@ function TemplateSurvey({ template, canEdit, i18n }) {
     useCallback(async () => {
       const { data } =
         templateType === 'workflow_job_template'
-          ? await WorkflowJobTemplatesAPI.readSurvey(templateId)
-          : await JobTemplatesAPI.readSurvey(templateId);
+          ? await WorkflowJobTemplatesAPI.readSurvey(template.id)
+          : await JobTemplatesAPI.readSurvey(template.id);
       return data;
-    }, [templateId, templateType])
+    }, [template.id, templateType])
   );
 
   useEffect(() => {
     fetchSurvey();
-  }, [fetchSurvey]);
+  }, [fetchSurvey, location]);
 
-  const {
-    request: updateSurvey,
-    error: updateError,
-    isLoading: updateLoading,
-  } = useRequest(
+  const { request: updateSurvey, error: updateError } = useRequest(
     useCallback(
       async updatedSurvey => {
         if (templateType === 'workflow_job_template') {
-          await WorkflowJobTemplatesAPI.updateSurvey(templateId, updatedSurvey);
+          await WorkflowJobTemplatesAPI.updateSurvey(
+            template.id,
+            updatedSurvey
+          );
         } else {
-          await JobTemplatesAPI.updateSurvey(templateId, updatedSurvey);
+          await JobTemplatesAPI.updateSurvey(template.id, updatedSurvey);
         }
         setSurvey(updatedSurvey);
       },
-      [templateId, setSurvey, templateType]
+      [template.id, setSurvey, templateType]
     )
   );
   const updateSurveySpec = spec => {
@@ -61,24 +61,24 @@ function TemplateSurvey({ template, canEdit, i18n }) {
 
   const { request: deleteSurvey, error: deleteError } = useRequest(
     useCallback(async () => {
-      await JobTemplatesAPI.destroySurvey(templateId);
+      await JobTemplatesAPI.destroySurvey(template.id);
       setSurvey(null);
-    }, [templateId, setSurvey])
+    }, [template.id, setSurvey])
   );
 
   const { request: toggleSurvey, error: toggleError } = useRequest(
     useCallback(async () => {
       if (templateType === 'workflow_job_template') {
-        await WorkflowJobTemplatesAPI.update(templateId, {
+        await WorkflowJobTemplatesAPI.update(template.id, {
           survey_enabled: !surveyEnabled,
         });
       } else {
-        await JobTemplatesAPI.update(templateId, {
+        await JobTemplatesAPI.update(template.id, {
           survey_enabled: !surveyEnabled,
         });
       }
       setSurveyEnabled(!surveyEnabled);
-    }, [templateId, templateType, surveyEnabled])
+    }, [template.id, templateType, surveyEnabled])
   );
 
   const { error, dismissError } = useDismissableError(
@@ -100,7 +100,7 @@ function TemplateSurvey({ template, canEdit, i18n }) {
           </Route>
         )}
         {canEdit && (
-          <Route path="/templates/:templateType/:id/survey/edit">
+          <Route path="/templates/:templateType/:id/survey/edit/:variable">
             <SurveyQuestionEdit
               survey={survey}
               updateSurvey={updateSurveySpec}
@@ -109,7 +109,7 @@ function TemplateSurvey({ template, canEdit, i18n }) {
         )}
         <Route path="/templates/:templateType/:id/survey" exact>
           <SurveyList
-            isLoading={isLoading || updateLoading}
+            isLoading={isLoading}
             survey={survey}
             surveyEnabled={surveyEnabled}
             toggleSurvey={toggleSurvey}

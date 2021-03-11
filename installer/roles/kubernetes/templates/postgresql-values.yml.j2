@@ -36,14 +36,11 @@ master:
 {% endif %}
 image:
 {% if pg_image_registry is defined %}
-# The default bitnami image from the chart doesn't work on ARM
   registry: {{ pg_image_registry }}
 {% endif %}
-{% if pg_image_registry is not defined %}
-  registry: docker.io/bitnami
-{% endif %}
-  repository: postgresql
-  tag: '12.5.0'
+  # The default bitnami image from the chart doesn't work on ARM
+  repository: postgres
+  tag: '11'
 volumePermissions:
   image:
 {% if pg_image_registry is defined %}

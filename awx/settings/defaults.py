@@ -116,7 +116,7 @@ LOGIN_URL = '/api/login/'
 
 # Absolute filesystem path to the directory to host projects (with playbooks).
 # This directory should not be web-accessible.
-PROJECTS_ROOT = '/var/lib/awx/projects/'
+PROJECTS_ROOT = os.path.join(BASE_DIR, 'projects')
 
 # Absolute filesystem path to the directory to host collections for
 # running inventory imports, isolated playbooks
@@ -125,10 +125,10 @@ AWX_ANSIBLE_COLLECTIONS_PATHS = os.path.join(BASE_DIR, 'vendor', 'awx_ansible_co
 # Absolute filesystem path to the directory for job status stdout (default for
 # development and tests, default for production defined in production.py). This
 # directory should not be web-accessible
-JOBOUTPUT_ROOT = '/var/lib/awx/job_status/'
+JOBOUTPUT_ROOT = os.path.join(BASE_DIR, 'job_output')
 
 # Absolute filesystem path to the directory to store logs
-LOG_ROOT = '/var/log/tower/'
+LOG_ROOT = os.path.join(BASE_DIR)
 
 # The heartbeat file for the tower scheduler
 SCHEDULE_METADATA_LOCATION = os.path.join(BASE_DIR, '.tower_cycle')
@@ -196,9 +196,9 @@ LOCAL_STDOUT_EXPIRE_TIME = 2592000
 # events into the database
 JOB_EVENT_WORKERS = 4
 
-# The number of seconds to buffer callback receiver bulk
+# The number of seconds (must be an integer) to buffer callback receiver bulk
 # writes in memory before flushing via JobEvent.objects.bulk_create()
-JOB_EVENT_BUFFER_SECONDS = .1
+JOB_EVENT_BUFFER_SECONDS = 1
 
 # The interval at which callback receiver statistics should be
 # recorded
@@ -662,7 +662,7 @@ INV_ENV_VARIABLE_BLOCKED = ("HOME", "USER", "_", "TERM")
 # ----------------
 EC2_ENABLED_VAR = 'ec2_state'
 EC2_ENABLED_VALUE = 'running'
-EC2_INSTANCE_ID_VAR = 'instance_id'
+EC2_INSTANCE_ID_VAR = 'ec2_id'
 EC2_EXCLUDE_EMPTY_GROUPS = True
 
 # ------------
@@ -932,14 +932,6 @@ LOGGING = {
             'backupCount': 5,
             'formatter':'simple',
         },
-        'isolated_manager': {
-            'level': 'WARNING',
-            'class':'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_ROOT, 'isolated_manager.log'),
-            'maxBytes': 1024 * 1024 * 5, # 5 MB
-            'backupCount': 5,
-            'formatter':'simple',
-        },
     },
     'loggers': {
         'django': {
@@ -988,11 +980,6 @@ LOGGING = {
         },
         'awx.main.wsbroadcast': {
             'handlers': ['wsbroadcast'],
-        },
-        'awx.isolated.manager': {
-            'level': 'WARNING',
-            'handlers': ['console', 'file', 'isolated_manager'],
-            'propagate': True
         },
         'awx.isolated.manager.playbooks': {
             'handlers': ['management_playbooks'],

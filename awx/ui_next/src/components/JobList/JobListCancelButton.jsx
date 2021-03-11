@@ -7,15 +7,8 @@ import { KebabifiedContext } from '../../contexts/Kebabified';
 import AlertModal from '../AlertModal';
 import { Job } from '../../types';
 
-function cannotCancelBecausePermissions(job) {
-  return (
-    !job.summary_fields.user_capabilities.start &&
-    ['pending', 'waiting', 'running'].includes(job.status)
-  );
-}
-
-function cannotCancelBecauseNotRunning(job) {
-  return !['pending', 'waiting', 'running'].includes(job.status);
+function cannotCancel(job) {
+  return !job.summary_fields.user_capabilities.start;
 }
 
 function JobListCancelButton({ i18n, jobsToCancel, onCancel }) {
@@ -40,40 +33,20 @@ function JobListCancelButton({ i18n, jobsToCancel, onCancel }) {
   }, [isKebabified, isModalOpen, onKebabModalChange]);
 
   const renderTooltip = () => {
-    const cannotCancelPermissions = jobsToCancel
-      .filter(cannotCancelBecausePermissions)
+    const jobsUnableToCancel = jobsToCancel
+      .filter(cannotCancel)
       .map(job => job.name);
-    const cannotCancelNotRunning = jobsToCancel
-      .filter(cannotCancelBecauseNotRunning)
-      .map(job => job.name);
-    const numJobsUnableToCancel = cannotCancelPermissions.concat(
-      cannotCancelNotRunning
-    ).length;
+    const numJobsUnableToCancel = jobsUnableToCancel.length;
     if (numJobsUnableToCancel > 0) {
       return (
         <div>
-          {cannotCancelPermissions.length > 0 && (
-            <div>
-              {i18n._(
-                '{numJobsUnableToCancel, plural, one {You do not have permission to cancel the following job:} other {You do not have permission to cancel the following jobs:}}',
-                {
-                  numJobsUnableToCancel: cannotCancelPermissions.length,
-                }
-              )}
-              {' '.concat(cannotCancelPermissions.join(', '))}
-            </div>
+          {i18n._(
+            '{numJobsUnableToCancel, plural, one {You do not have permission to cancel the following job:} other {You do not have permission to cancel the following jobs:}}',
+            {
+              numJobsUnableToCancel,
+            }
           )}
-          {cannotCancelNotRunning.length > 0 && (
-            <div>
-              {i18n._(
-                '{numJobsUnableToCancel, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}',
-                {
-                  numJobsUnableToCancel: cannotCancelNotRunning.length,
-                }
-              )}
-              {' '.concat(cannotCancelNotRunning.join(', '))}
-            </div>
-          )}
+          {' '.concat(jobsUnableToCancel.join(', '))}
         </div>
       );
     }
@@ -89,9 +62,7 @@ function JobListCancelButton({ i18n, jobsToCancel, onCancel }) {
   };
 
   const isDisabled =
-    jobsToCancel.length === 0 ||
-    jobsToCancel.some(cannotCancelBecausePermissions) ||
-    jobsToCancel.some(cannotCancelBecauseNotRunning);
+    jobsToCancel.length === 0 || jobsToCancel.some(cannotCancel);
 
   const cancelJobText = i18n._(
     '{zeroOrOneJobSelected, plural, one {Cancel job} other {Cancel jobs}}',

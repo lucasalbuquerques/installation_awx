@@ -7,11 +7,7 @@ import { Button } from '@patternfly/react-core';
 import useRequest, { useDismissableError } from '../../../util/useRequest';
 import AlertModal from '../../../components/AlertModal';
 import { CardBody, CardActionsRow } from '../../../components/Card';
-import {
-  Detail,
-  DetailList,
-  UserDateDetail,
-} from '../../../components/DetailList';
+import { Detail, DetailList } from '../../../components/DetailList';
 import { ApplicationsAPI } from '../../../api';
 import DeleteButton from '../../../components/DeleteButton';
 import ErrorDetail from '../../../components/ErrorDetail';
@@ -62,12 +58,11 @@ function ApplicationDetails({
         <Detail
           label={i18n._(t`Name`)}
           value={application.name}
-          dataCy="app-detail-name"
+          dataCy="jt-detail-name"
         />
         <Detail
           label={i18n._(t`Description`)}
           value={application.description}
-          dataCy="app-detail-description"
         />
         <Detail
           label={i18n._(t`Organization`)}
@@ -78,34 +73,20 @@ function ApplicationDetails({
               {application.summary_fields.organization.name}
             </Link>
           }
-          dataCy="app-detail-organization"
         />
         <Detail
           label={i18n._(t`Authorization grant type`)}
           value={getAuthorizationGrantType(
             application.authorization_grant_type
           )}
-          dataCy="app-detail-authorization-grant-type"
-        />
-        <Detail
-          label={i18n._(t`Client ID`)}
-          value={application.client_id}
-          dataCy="app-detail-client-id"
         />
         <Detail
           label={i18n._(t`Redirect uris`)}
           value={application.redirect_uris}
-          dataCy="app-detail-redirect-uris"
         />
         <Detail
           label={i18n._(t`Client type`)}
           value={getClientType(application.client_type)}
-          dataCy="app-detail-client-type"
-        />
-        <UserDateDetail label={i18n._(t`Created`)} date={application.created} />
-        <UserDateDetail
-          label={i18n._(t`Last Modified`)}
-          date={application.modified}
         />
       </DetailList>
       <CardActionsRow>

@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
 import { createMemoryHistory } from 'history';
 import { Link } from 'react-router-dom';
-
+import { withI18n } from '@lingui/react';
+import { t } from '@lingui/macro';
 import { mountWithContexts, waitForElement } from './enzymeHelpers';
 import { Config } from '../src/contexts/Config';
 
 describe('mountWithContexts', () => {
   describe('injected I18nProvider', () => {
     test('should mount and render', () => {
-      const Child = () => (
+      const Child = withI18n()(({ i18n }) => (
         <div>
-          <span>Text content</span>
+          <span>{i18n._(t`Text content`)}</span>
         </div>
-      );
+      ));
       const wrapper = mountWithContexts(<Child />);
       expect(wrapper.find('div')).toMatchSnapshot();
     });
 
     test('should mount and render deeply nested consumer', () => {
-      const Child = () => <div>Text content</div>;
+      const Child = withI18n()(({ i18n }) => (
+        <div>{i18n._(t`Text content`)}</div>
+      ));
       const Parent = () => <Child />;
       const wrapper = mountWithContexts(<Parent />);
       expect(wrapper.find('Parent')).toMatchSnapshot();
@@ -143,9 +146,7 @@ describe('waitForElement', () => {
     } catch (err) {
       error = err;
     } finally {
-      expect(error.message).toContain(
-        'Expected condition for <#does-not-exist> not met'
-      );
+      expect(error.message).toContain('Expected condition for <#does-not-exist> not met');
       expect(error.message).toContain('el.length === 1');
       done();
     }

@@ -44,19 +44,6 @@ function Project({ i18n, setBreadcrumb }) {
           role_level: 'notification_admin_role',
         }),
       ]);
-
-      if (data.summary_fields.credentials) {
-        const params = {
-          page: 1,
-          page_size: 200,
-          order_by: 'name',
-        };
-        const {
-          data: { results },
-        } = await ProjectsAPI.readCredentials(data.id, params);
-
-        data.summary_fields.credentials = results;
-      }
       return {
         project: data,
         isNotifAdmin: notifAdminRes.data.results.length > 0,
@@ -82,16 +69,13 @@ function Project({ i18n, setBreadcrumb }) {
     return ProjectsAPI.createSchedule(project.id, data);
   }
 
-  const loadScheduleOptions = useCallback(() => {
+  function loadScheduleOptions() {
     return ProjectsAPI.readScheduleOptions(project.id);
-  }, [project]);
+  }
 
-  const loadSchedules = useCallback(
-    params => {
-      return ProjectsAPI.readSchedules(project.id, params);
-    },
-    [project]
-  );
+  function loadSchedules(params) {
+    return ProjectsAPI.readSchedules(project.id, params);
+  }
 
   const canSeeNotificationsTab = me.is_system_auditor || isNotifAdmin;
   const canToggleNotifications = isNotifAdmin;
@@ -150,10 +134,10 @@ function Project({ i18n, setBreadcrumb }) {
     );
   }
 
-  const showCardHeader = !(
-    location.pathname.endsWith('edit') ||
-    location.pathname.includes('schedules/')
-  );
+  let showCardHeader = true;
+  if (['edit', 'schedules/'].some(name => location.pathname.includes(name))) {
+    showCardHeader = false;
+  }
 
   return (
     <PageSection>

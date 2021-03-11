@@ -9,7 +9,7 @@ import InstanceGroup from './InstanceGroup';
 
 import ContainerGroupAdd from './ContainerGroupAdd';
 import ContainerGroup from './ContainerGroup';
-import ScreenHeader from '../../components/ScreenHeader';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
 function InstanceGroups({ i18n }) {
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
@@ -54,10 +54,7 @@ function InstanceGroups({ i18n }) {
   );
   return (
     <>
-      <ScreenHeader
-        streamType="instance_group"
-        breadcrumbConfig={breadcrumbConfig}
-      />
+      <Breadcrumbs breadcrumbConfig={breadcrumbConfig} />
       <Switch>
         <Route path="/instance_groups/container_group/add">
           <ContainerGroupAdd />

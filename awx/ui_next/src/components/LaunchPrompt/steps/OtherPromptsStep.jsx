@@ -20,11 +20,11 @@ const FieldHeader = styled.div`
   }
 `;
 
-function OtherPromptsStep({ launchConfig, i18n }) {
+function OtherPromptsStep({ config, i18n }) {
   return (
     <Form>
-      {launchConfig.ask_job_type_on_launch && <JobTypeField i18n={i18n} />}
-      {launchConfig.ask_limit_on_launch && (
+      {config.ask_job_type_on_launch && <JobTypeField i18n={i18n} />}
+      {config.ask_limit_on_launch && (
         <FormField
           id="prompt-limit"
           name="limit"
@@ -35,7 +35,7 @@ function OtherPromptsStep({ launchConfig, i18n }) {
           information and examples on patterns.`)}
         />
       )}
-      {launchConfig.ask_scm_branch_on_launch && (
+      {config.ask_scm_branch_on_launch && (
         <FormField
           id="prompt-scm-branch"
           name="scm_branch"
@@ -45,11 +45,9 @@ function OtherPromptsStep({ launchConfig, i18n }) {
           )}
         />
       )}
-      {launchConfig.ask_verbosity_on_launch && <VerbosityField i18n={i18n} />}
-      {launchConfig.ask_diff_mode_on_launch && (
-        <ShowChangesToggle i18n={i18n} />
-      )}
-      {launchConfig.ask_tags_on_launch && (
+      {config.ask_verbosity_on_launch && <VerbosityField i18n={i18n} />}
+      {config.ask_diff_mode_on_launch && <ShowChangesToggle i18n={i18n} />}
+      {config.ask_tags_on_launch && (
         <TagField
           id="prompt-job-tags"
           name="job_tags"
@@ -61,7 +59,7 @@ function OtherPromptsStep({ launchConfig, i18n }) {
             documentation for details on the usage of tags.`)}
         />
       )}
-      {launchConfig.ask_skip_tags_on_launch && (
+      {config.ask_skip_tags_on_launch && (
         <TagField
           id="prompt-skip-tags"
           name="skip_tags"
@@ -73,7 +71,7 @@ function OtherPromptsStep({ launchConfig, i18n }) {
             documentation for details on the usage of tags.`)}
         />
       )}
-      {launchConfig.ask_variables_on_launch && (
+      {config.ask_variables_on_launch && (
         <VariablesField
           id="prompt-variables"
           name="extra_vars"

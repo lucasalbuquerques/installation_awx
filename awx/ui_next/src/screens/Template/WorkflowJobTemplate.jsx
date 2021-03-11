@@ -13,7 +13,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 import RoutedTabs from '../../components/RoutedTabs';
-import { useConfig } from '../../contexts/Config';
 import useRequest from '../../util/useRequest';
 import AppendBody from '../../components/AppendBody';
 import ContentError from '../../components/ContentError';
@@ -27,13 +26,11 @@ import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 import { WorkflowJobTemplatesAPI, OrganizationsAPI } from '../../api';
 import TemplateSurvey from './TemplateSurvey';
 import { Visualizer } from './WorkflowJobTemplateVisualizer';
-import ContentLoading from '../../components/ContentLoading';
 
-function WorkflowJobTemplate({ i18n, setBreadcrumb }) {
+function WorkflowJobTemplate({ i18n, me, setBreadcrumb }) {
   const location = useLocation();
-  const match = useRouteMatch();
   const { id: templateId } = useParams();
-  const { me = {} } = useConfig();
+  const match = useRouteMatch();
 
   const {
     result: { isNotifAdmin, template },
@@ -77,16 +74,13 @@ function WorkflowJobTemplate({ i18n, setBreadcrumb }) {
     return WorkflowJobTemplatesAPI.createSchedule(templateId, data);
   };
 
-  const loadScheduleOptions = useCallback(() => {
+  const loadScheduleOptions = () => {
     return WorkflowJobTemplatesAPI.readScheduleOptions(templateId);
-  }, [templateId]);
+  };
 
-  const loadSchedules = useCallback(
-    params => {
-      return WorkflowJobTemplatesAPI.readSchedules(templateId, params);
-    },
-    [templateId]
-  );
+  const loadSchedules = params => {
+    return WorkflowJobTemplatesAPI.readSchedules(templateId, params);
+  };
 
   const canSeeNotificationsTab = me.is_system_auditor || isNotifAdmin;
   const canAddAndEditSurvey =
@@ -151,10 +145,6 @@ function WorkflowJobTemplate({ i18n, setBreadcrumb }) {
   }
 
   const contentError = rolesAndTemplateError;
-
-  if (hasRolesandTemplateLoading) {
-    return <ContentLoading />;
-  }
   if (!hasRolesandTemplateLoading && contentError) {
     return (
       <PageSection>
@@ -220,7 +210,6 @@ function WorkflowJobTemplate({ i18n, setBreadcrumb }) {
                 id={Number(templateId)}
                 canToggleNotifications={isNotifAdmin}
                 apiModel={WorkflowJobTemplatesAPI}
-                showApprovalsToggle
               />
             </Route>
           )}

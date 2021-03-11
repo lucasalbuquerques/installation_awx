@@ -3,10 +3,6 @@ import { createMemoryHistory } from 'history';
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import WorkflowApprovals from './WorkflowApprovals';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<WorkflowApprovals />', () => {
   test('initially renders succesfully', () => {
     mountWithContexts(<WorkflowApprovals />);
@@ -33,8 +29,7 @@ describe('<WorkflowApprovals />', () => {
         },
       },
     });
-
-    expect(wrapper.find('Title').length).toBe(1);
+    expect(wrapper.find('BreadcrumbHeading').length).toBe(1);
     wrapper.unmount();
   });
 });

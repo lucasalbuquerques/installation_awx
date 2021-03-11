@@ -118,20 +118,15 @@ function encodeValue(key, value) {
  * removing defaults. Used to put into url bar after ui route
  * @param {object} qs config object for namespacing params, filtering defaults
  * @param {object} query param object
- * @param {object} any non-namespaced params to append
  * @return {string} url query string
  */
-export const encodeNonDefaultQueryString = (
-  config,
-  params,
-  nonNamespacedParams = {}
-) => {
+export const encodeNonDefaultQueryString = (config, params) => {
   if (!params) return '';
+
   const paramsWithoutDefaults = removeParams({}, params, config.defaultParams);
-  return encodeQueryString({
-    ...namespaceParams(config.namespace, paramsWithoutDefaults),
-    ...nonNamespacedParams,
-  });
+  return encodeQueryString(
+    namespaceParams(config.namespace, paramsWithoutDefaults)
+  );
 };
 
 /**

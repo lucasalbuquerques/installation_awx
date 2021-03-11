@@ -6,31 +6,23 @@ import { Formik, useFormikContext } from 'formik';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import { useDismissableError } from '../../util/useRequest';
-import mergeExtraVars from '../../util/prompt/mergeExtraVars';
-import getSurveyValues from '../../util/prompt/getSurveyValues';
+import mergeExtraVars from './mergeExtraVars';
 import useLaunchSteps from './useLaunchSteps';
 import AlertModal from '../AlertModal';
+import getSurveyValues from './getSurveyValues';
 
-function PromptModalForm({
-  launchConfig,
-  i18n,
-  onCancel,
-  onSubmit,
-  resource,
-  surveyConfig,
-}) {
-  const { setFieldTouched, values } = useFormikContext();
+function PromptModalForm({ onSubmit, onCancel, i18n, config, resource }) {
+  const { values, setTouched, validateForm } = useFormikContext();
 
   const {
     steps,
     isReady,
-    validateStep,
     visitStep,
     visitAllSteps,
     contentError,
-  } = useLaunchSteps(launchConfig, surveyConfig, resource, i18n);
+  } = useLaunchSteps(config, resource, i18n);
 
-  const handleSubmit = () => {
+  const handleSave = () => {
     const postValues = {};
     const setValue = (key, value) => {
       if (typeof value !== 'undefined' && value !== null) {
@@ -38,7 +30,6 @@ function PromptModalForm({
       }
     };
     const surveyValues = getSurveyValues(values);
-    setValue('credential_passwords', values.credential_passwords);
     setValue('inventory_id', values.inventory?.id);
     setValue(
       'credentials',
@@ -48,7 +39,7 @@ function PromptModalForm({
     setValue('limit', values.limit);
     setValue('job_tags', values.job_tags);
     setValue('skip_tags', values.skip_tags);
-    const extraVars = launchConfig.ask_variables_on_launch
+    const extraVars = config.ask_variables_on_launch
       ? values.extra_vars || '---'
       : resource.extra_vars;
     setValue('extra_vars', mergeExtraVars(extraVars, surveyValues));
@@ -77,25 +68,22 @@ function PromptModalForm({
     <Wizard
       isOpen
       onClose={onCancel}
-      onSave={handleSubmit}
-      onBack={async nextStep => {
-        validateStep(nextStep.id);
-      }}
+      onSave={handleSave}
       onNext={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
-          visitAllSteps(setFieldTouched);
+          visitAllSteps(setTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId);
         }
+        await validateForm();
       }}
       onGoToStep={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
-          visitAllSteps(setFieldTouched);
+          visitAllSteps(setTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId);
         }
+        await validateForm();
       }}
       title={i18n._(t`Prompts`)}
       steps={
@@ -115,22 +103,28 @@ function PromptModalForm({
   );
 }
 
-function LaunchPrompt({
-  launchConfig,
-  i18n,
-  onCancel,
-  onLaunch,
-  resource = {},
-  surveyConfig,
-}) {
+function LaunchPrompt({ config, resource = {}, onLaunch, onCancel, i18n }) {
   return (
-    <Formik initialValues={{}} onSubmit={values => onLaunch(values)}>
+    <Formik
+      initialValues={{
+        verbosity: resource.verbosity || 0,
+        inventory: resource.summary_fields?.inventory || null,
+        credentials: resource.summary_fields?.credentials || null,
+        diff_mode: resource.diff_mode || false,
+        extra_vars: resource.extra_vars || '---',
+        job_type: resource.job_type || '',
+        job_tags: resource.job_tags || '',
+        skip_tags: resource.skip_tags || '',
+        scm_branch: resource.scm_branch || '',
+        limit: resource.limit || '',
+      }}
+      onSubmit={values => onLaunch(values)}
+    >
       <PromptModalForm
         onSubmit={values => onLaunch(values)}
         onCancel={onCancel}
         i18n={i18n}
-        launchConfig={launchConfig}
-        surveyConfig={surveyConfig}
+        config={config}
         resource={resource}
       />
     </Formik>

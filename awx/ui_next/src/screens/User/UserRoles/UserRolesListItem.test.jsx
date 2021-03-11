@@ -35,13 +35,13 @@ describe('<UserRolesListItem/>', () => {
       />
     );
     expect(
-      wrapper.find('PFDataListCell[aria-label="Resource name"]').text()
+      wrapper.find('PFDataListCell[aria-label="resource name"]').text()
     ).toBe('template delete project');
     expect(
-      wrapper.find('PFDataListCell[aria-label="Resource type"]').text()
+      wrapper.find('PFDataListCell[aria-label="resource type"]').text()
     ).toContain('Job Template');
     expect(
-      wrapper.find('PFDataListCell[aria-label="Resource role"]').text()
+      wrapper.find('PFDataListCell[aria-label="resource role"]').text()
     ).toContain('Admin');
   });
   test('should render deletable chip', () => {
@@ -62,20 +62,5 @@ describe('<UserRolesListItem/>', () => {
       />
     );
     expect(wrapper.find('Chip').prop('isReadOnly')).toBe(true);
-  });
-  test('should display System as name when no resource_name is present in summary_fields', () => {
-    wrapper = mountWithContexts(
-      <UserRolesListItem
-        role={{
-          ...role,
-          summary_fields: {
-            user_capabilities: { unattach: false },
-          },
-        }}
-      />
-    );
-    expect(
-      wrapper.find('PFDataListCell[aria-label="Resource name"]').text()
-    ).toBe('System');
   });
 });

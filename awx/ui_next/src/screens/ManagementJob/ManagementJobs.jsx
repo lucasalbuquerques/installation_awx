@@ -1,18 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withI18n } from '@lingui/react';
 import { t } from '@lingui/macro';
 
-import ScreenHeader from '../../components/ScreenHeader';
+import Breadcrumbs from '../../components/Breadcrumbs';
 
-function ManagementJobs({ i18n }) {
-  return (
-    <Fragment>
-      <ScreenHeader
-        streamType="none"
-        breadcrumbConfig={{ '/management_jobs': i18n._(t`Management Jobs`) }}
-      />
-    </Fragment>
-  );
+class ManagementJobs extends Component {
+  render() {
+    const { i18n } = this.props;
+
+    return (
+      <Fragment>
+        <Breadcrumbs
+          breadcrumbConfig={{ '/management_jobs': i18n._(t`Management Jobs`) }}
+        />
+      </Fragment>
+    );
+  }
 }
 
 export default withI18n()(ManagementJobs);

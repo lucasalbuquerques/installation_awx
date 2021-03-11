@@ -1,20 +1,19 @@
 import React from 'react';
 import { shape, string, number, arrayOf, node, oneOfType } from 'prop-types';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 function RoutedTabs(props) {
   const { tabsArray } = props;
   const history = useHistory();
-  const location = useLocation();
 
   const getActiveTabId = () => {
-    const match = tabsArray.find(tab => tab.link === location.pathname);
+    const match = tabsArray.find(tab => tab.link === history.location.pathname);
     if (match) {
       return match.id;
     }
     const subpathMatch = tabsArray.find(tab =>
-      location.pathname.startsWith(tab.link)
+      history.location.pathname.startsWith(tab.link)
     );
     if (subpathMatch) {
       return subpathMatch.id;

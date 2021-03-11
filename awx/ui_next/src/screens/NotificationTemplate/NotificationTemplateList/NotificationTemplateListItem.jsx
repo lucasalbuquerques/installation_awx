@@ -14,11 +14,9 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { PencilAltIcon, BellIcon } from '@patternfly/react-icons';
-import { timeOfDay } from '../../../util/dates';
 import { NotificationTemplatesAPI, NotificationsAPI } from '../../../api';
 import DataListCell from '../../../components/DataListCell';
 import StatusLabel from '../../../components/StatusLabel';
-import CopyButton from '../../../components/CopyButton';
 import useRequest from '../../../util/useRequest';
 import { NOTIFICATION_TYPES } from '../constants';
 
@@ -26,7 +24,7 @@ const DataListAction = styled(_DataListAction)`
   align-items: center;
   display: grid;
   grid-gap: 16px;
-  grid-template-columns: repeat(3, 40px);
+  grid-template-columns: 40px 40px;
 `;
 
 const NUM_RETRIES = 25;
@@ -35,7 +33,6 @@ const RETRY_TIMEOUT = 5000;
 function NotificationTemplateListItem({
   template,
   detailUrl,
-  fetchTemplates,
   isSelected,
   onSelect,
   i18n,
@@ -45,22 +42,6 @@ function NotificationTemplateListItem({
     ? recentNotifications[0]?.status
     : null;
   const [status, setStatus] = useState(latestStatus);
-  const [isCopyDisabled, setIsCopyDisabled] = useState(false);
-
-  const copyTemplate = useCallback(async () => {
-    await NotificationTemplatesAPI.copy(template.id, {
-      name: `${template.name} @ ${timeOfDay()}`,
-    });
-    await fetchTemplates();
-  }, [template.id, template.name, fetchTemplates]);
-
-  const handleCopyStart = useCallback(() => {
-    setIsCopyDisabled(true);
-  }, []);
-
-  const handleCopyFinish = useCallback(() => {
-    setIsCopyDisabled(false);
-  }, []);
 
   useEffect(() => {
     setStatus(latestStatus);
@@ -133,7 +114,7 @@ function NotificationTemplateListItem({
               aria-label={i18n._(t`Test Notification`)}
               variant="plain"
               onClick={sendTestNotification}
-              isDisabled={isLoading || status === 'running'}
+              disabled={isLoading}
             >
               <BellIcon />
             </Button>
@@ -154,18 +135,6 @@ function NotificationTemplateListItem({
             </Tooltip>
           ) : (
             <div />
-          )}
-          {template.summary_fields.user_capabilities.copy && (
-            <CopyButton
-              copyItem={copyTemplate}
-              isCopyDisabled={isCopyDisabled}
-              onCopyStart={handleCopyStart}
-              onCopyFinish={handleCopyFinish}
-              helperText={{
-                tooltip: i18n._(t`Copy Notification Template`),
-                errorMessage: i18n._(t`Failed to copy template.`),
-              }}
-            />
           )}
         </DataListAction>
       </DataListItemRow>

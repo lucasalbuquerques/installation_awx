@@ -30,7 +30,7 @@ function AnswerTypeField({ i18n }) {
 
   return (
     <FormGroup
-      label={i18n._(t`Answer type`)}
+      label={i18n._(t`Answer Type`)}
       labelIcon={
         <Popover
           content={i18n._(
@@ -91,7 +91,6 @@ function SurveyQuestionForm({
 
   return (
     <Formik
-      enableReinitialize
       initialValues={{
         question_name: question?.question_name || '',
         question_description: question?.question_description || '',
@@ -127,7 +126,7 @@ function SurveyQuestionForm({
               id="question-variable"
               name="variable"
               type="text"
-              label={i18n._(t`Answer variable name`)}
+              label={i18n._(t`Answer Variable Name`)}
               validate={combine([noWhiteSpace(i18n), required(null, i18n)])}
               isRequired
               tooltip={i18n._(

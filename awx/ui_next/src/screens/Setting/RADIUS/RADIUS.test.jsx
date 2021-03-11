@@ -2,18 +2,12 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { SettingsProvider } from '../../../contexts/Settings';
-import { SettingsAPI } from '../../../api';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
 import RADIUS from './RADIUS';
+import { SettingsAPI } from '../../../api';
 
 jest.mock('../../../api/models/Settings');
 SettingsAPI.readCategory.mockResolvedValue({
-  data: {
-    RADIUS_SERVER: 'radius.example.org',
-    RADIUS_PORT: 1812,
-    RADIUS_SECRET: '$encrypted$',
-  },
+  data: {},
 });
 
 describe('<RADIUS />', () => {
@@ -29,14 +23,9 @@ describe('<RADIUS />', () => {
       initialEntries: ['/settings/radius/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUS />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
+      wrapper = mountWithContexts(<RADIUS />, {
+        context: { router: { history } },
+      });
     });
     expect(wrapper.find('RADIUSDetail').length).toBe(1);
   });
@@ -46,14 +35,9 @@ describe('<RADIUS />', () => {
       initialEntries: ['/settings/radius/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <RADIUS />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
+      wrapper = mountWithContexts(<RADIUS />, {
+        context: { router: { history } },
+      });
     });
     expect(wrapper.find('RADIUSEdit').length).toBe(1);
   });

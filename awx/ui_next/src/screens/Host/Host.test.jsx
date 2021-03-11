@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from '../../api';
@@ -29,11 +28,7 @@ describe('<Host />', () => {
 
   beforeEach(async () => {
     await act(async () => {
-      wrapper = mountWithContexts(
-        <Route path="/hosts/:id/details">
-          <Host setBreadcrumb={() => {}} />
-        </Route>
-      );
+      wrapper = mountWithContexts(<Host setBreadcrumb={() => {}} />);
     });
   });
 

@@ -14,6 +14,7 @@ import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from '../../util/useRequest';
 import { UsersAPI } from '../../api';
 import ContentError from '../../components/ContentError';
+import ContentLoading from '../../components/ContentLoading';
 import RoutedTabs from '../../components/RoutedTabs';
 import UserDetail from './UserDetail';
 import UserEdit from './UserEdit';
@@ -85,7 +86,7 @@ function User({ i18n, setBreadcrumb, me }) {
     showCardHeader = false;
   }
 
-  if (!isLoading && contentError) {
+  if (contentError) {
     return (
       <PageSection>
         <Card>
@@ -106,34 +107,41 @@ function User({ i18n, setBreadcrumb, me }) {
     <PageSection>
       <Card>
         {showCardHeader && <RoutedTabs tabsArray={tabsArray} />}
-        <Switch>
-          <Redirect from="/users/:id" to="/users/:id/details" exact />
-          {user && [
-            <Route path="/users/:id/edit" key="edit">
-              <UserEdit user={user} />
-            </Route>,
-            <Route path="/users/:id/details" key="details">
-              <UserDetail user={user} />
-            </Route>,
-            <Route path="/users/:id/organizations" key="organizations">
+        {isLoading && <ContentLoading />}
+        {!isLoading && user && (
+          <Switch>
+            <Redirect from="/users/:id" to="/users/:id/details" exact />
+            {user && (
+              <Route path="/users/:id/edit">
+                <UserEdit user={user} />
+              </Route>
+            )}
+            {user && (
+              <Route path="/users/:id/details">
+                <UserDetail user={user} />
+              </Route>
+            )}
+            <Route path="/users/:id/organizations">
               <UserOrganizations id={Number(match.params.id)} />
-            </Route>,
-            <Route path="/users/:id/teams" key="teams">
-              <UserTeams />
-            </Route>,
-            <Route path="/users/:id/roles" key="roles">
-              <UserRolesList user={user} />
-            </Route>,
-            <Route path="/users/:id/tokens" key="tokens">
+            </Route>
+            {user && (
+              <Route path="/users/:id/teams">
+                <UserTeams />
+              </Route>
+            )}
+            {user && (
+              <Route path="/users/:id/roles">
+                <UserRolesList user={user} />
+              </Route>
+            )}
+            <Route path="/users/:id/tokens">
               <UserTokens
                 user={user}
                 setBreadcrumb={setBreadcrumb}
                 id={Number(match.params.id)}
               />
-            </Route>,
-          ]}
-          <Route key="not-found" path="*">
-            {!isLoading && (
+            </Route>
+            <Route key="not-found" path="*">
               <ContentError isNotFound>
                 {match.params.id && (
                   <Link to={`/users/${match.params.id}/details`}>
@@ -141,9 +149,9 @@ function User({ i18n, setBreadcrumb, me }) {
                   </Link>
                 )}
               </ContentError>
-            )}
-          </Route>
-        </Switch>
+            </Route>
+          </Switch>
+        )}
       </Card>
     </PageSection>
   );

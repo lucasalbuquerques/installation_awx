@@ -62,19 +62,14 @@ function InventorySource({ i18n, inventory, setBreadcrumb, me }) {
     }
   }, [inventory, source, setBreadcrumb]);
 
-  const loadSchedules = useCallback(
-    params => {
-      return InventorySourcesAPI.readSchedules(source?.id, params);
-    },
-    [source]
-  );
+  const loadSchedules = params =>
+    InventorySourcesAPI.readSchedules(source?.id, params);
 
   const createSchedule = data =>
     InventorySourcesAPI.createSchedule(source?.id, data);
 
-  const loadScheduleOptions = useCallback(() => {
-    return InventorySourcesAPI.readScheduleOptions(source?.id);
-  }, [source]);
+  const loadScheduleOptions = () =>
+    InventorySourcesAPI.readScheduleOptions(source?.id);
 
   const tabsArray = [
     {

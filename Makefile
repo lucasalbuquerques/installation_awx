@@ -19,8 +19,7 @@ PYCURL_SSL_LIBRARY ?= openssl
 COMPOSE_TAG ?= $(GIT_BRANCH)
 COMPOSE_HOST ?= $(shell hostname)
 
-VENV_BASE ?= /var/lib/awx/venv/
-COLLECTION_BASE ?= /var/lib/awx/vendor/awx_ansible_collections
+VENV_BASE ?= /venv
 SCL_PREFIX ?=
 CELERY_SCHEDULE_FILE ?= /var/lib/awx/beat.db
 
@@ -271,7 +270,7 @@ uwsgi: collectstatic
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-    uwsgi -b 32768 --socket 127.0.0.1:8050 --module=awx.wsgi:application --home=/var/lib/awx/venv/awx --chdir=/awx_devel/ --vacuum --processes=5 --harakiri=120 --master --no-orphans --py-autoreload 1 --max-requests=1000 --stats /tmp/stats.socket --lazy-apps --logformat "%(addr) %(method) %(uri) - %(proto) %(status)" --hook-accepting1="exec:supervisorctl restart tower-processes:awx-dispatcher tower-processes:awx-receiver"
+    uwsgi -b 32768 --socket 127.0.0.1:8050 --module=awx.wsgi:application --home=/venv/awx --chdir=/awx_devel/ --vacuum --processes=5 --harakiri=120 --master --no-orphans --py-autoreload 1 --max-requests=1000 --stats /tmp/stats.socket --lazy-apps --logformat "%(addr) %(method) %(uri) - %(proto) %(status)" --hook-accepting1="exec:supervisorctl restart tower-processes:awx-dispatcher tower-processes:awx-receiver"
 
 daphne:
 	@if [ "$(VENV_BASE)" ]; then \
@@ -341,7 +340,7 @@ check: flake8 pep8 # pyflakes pylint
 
 awx-link:
 	[ -d "/awx_devel/awx.egg-info" ] || python3 /awx_devel/setup.py egg_info_dev
-	cp -f /tmp/awx.egg-link /var/lib/awx/venv/awx/lib/python$(PYTHON_VERSION)/site-packages/awx.egg-link
+	cp -f /tmp/awx.egg-link /venv/awx/lib/python$(PYTHON_VERSION)/site-packages/awx.egg-link
 
 TEST_DIRS ?= awx/main/tests/unit awx/main/tests/functional awx/conf/tests awx/sso/tests
 
@@ -463,24 +462,19 @@ endif
 
 # UI TASKS
 # --------------------------------------
-
-UI_BUILD_FLAG_FILE = awx/ui_next/.ui-built
+awx/ui_next/node_modules:
+	$(NPM_BIN) --prefix awx/ui_next install
 
 clean-ui:
 	rm -rf node_modules
 	rm -rf awx/ui_next/node_modules
 	rm -rf awx/ui_next/build
-	rm -rf awx/ui_next/src/locales/_build
-	rm -rf $(UI_BUILD_FLAG_FILE)
-	git checkout awx/ui_next/src/locales
 
-awx/ui_next/node_modules:
-	$(NPM_BIN) --prefix awx/ui_next --loglevel warn --ignore-scripts install
-
-$(UI_BUILD_FLAG_FILE):
-	$(NPM_BIN) --prefix awx/ui_next --loglevel warn run extract-strings
-	$(NPM_BIN) --prefix awx/ui_next --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui_next --loglevel warn run build
+ui-release: ui-devel
+ui-devel: awx/ui_next/node_modules
+	$(NPM_BIN) --prefix awx/ui_next run extract-strings
+	$(NPM_BIN) --prefix awx/ui_next run compile-strings
+	$(NPM_BIN) --prefix awx/ui_next run build
 	git checkout awx/ui_next/src/locales
 	mkdir -p awx/public/static/css
 	mkdir -p awx/public/static/js
@@ -488,12 +482,6 @@ $(UI_BUILD_FLAG_FILE):
 	cp -r awx/ui_next/build/static/css/* awx/public/static/css
 	cp -r awx/ui_next/build/static/js/* awx/public/static/js
 	cp -r awx/ui_next/build/static/media/* awx/public/static/media
-	touch $@
-
-ui-release: awx/ui_next/node_modules $(UI_BUILD_FLAG_FILE)
-
-ui-devel: awx/ui_next/node_modules
-	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
 
 ui-zuul-lint-and-test:
 	$(NPM_BIN) --prefix awx/ui_next install
@@ -619,10 +607,7 @@ clean-elk:
 	docker rm tools_kibana_1
 
 psql-container:
-	docker run -it --net tools_default --rm postgres:12 sh -c 'exec psql -h "postgres" -p "5432" -U postgres'
+	docker run -it --net tools_default --rm postgres:10 sh -c 'exec psql -h "postgres" -p "5432" -U postgres'
 
 VERSION:
 	@echo "awx: $(VERSION)"
-
-Dockerfile: installer/roles/image_build/templates/Dockerfile.j2
-	ansible localhost -m template -a "src=installer/roles/image_build/templates/Dockerfile.j2 dest=Dockerfile"

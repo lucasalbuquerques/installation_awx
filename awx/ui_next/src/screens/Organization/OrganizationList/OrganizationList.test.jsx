@@ -103,7 +103,7 @@ describe('<OrganizationsList />', () => {
   });
 
   test('Item appears selected after selecting it', async () => {
-    const itemCheckboxInput = 'tr#org-row-1 input[type="checkbox"]';
+    const itemCheckboxInput = 'input#select-organization-1';
     await act(async () => {
       wrapper = mountWithContexts(<OrganizationsList />);
     });
@@ -115,6 +115,7 @@ describe('<OrganizationsList />', () => {
     await act(async () => {
       wrapper
         .find(itemCheckboxInput)
+        .closest('DataListCheck')
         .props()
         .onChange();
     });
@@ -127,9 +128,9 @@ describe('<OrganizationsList />', () => {
 
   test('All items appear selected after select-all and unselected after unselect-all', async () => {
     const itemCheckboxInputs = [
-      'tr#org-row-1 input[type="checkbox"]',
-      'tr#org-row-2 input[type="checkbox"]',
-      'tr#org-row-3 input[type="checkbox"]',
+      'input#select-organization-1',
+      'input#select-organization-2',
+      'input#select-organization-3',
     ];
     await act(async () => {
       wrapper = mountWithContexts(<OrganizationsList />);
@@ -226,7 +227,7 @@ describe('<OrganizationsList />', () => {
   });
 
   test('Error dialog shown for failed deletion', async () => {
-    const itemCheckboxInput = 'tr#org-row-1 input[type="checkbox"]';
+    const itemCheckboxInput = 'input#select-organization-1';
     OrganizationsAPI.destroy.mockRejectedValue(
       new Error({
         response: {
@@ -249,6 +250,7 @@ describe('<OrganizationsList />', () => {
     await act(async () => {
       wrapper
         .find(itemCheckboxInput)
+        .closest('DataListCheck')
         .props()
         .onChange();
     });

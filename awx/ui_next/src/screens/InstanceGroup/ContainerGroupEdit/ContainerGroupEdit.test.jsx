@@ -123,7 +123,7 @@ describe('<ContainerGroupEdit/>', () => {
   });
 
   test('called InstanceGroupsAPI.readOptions', async () => {
-    expect(InstanceGroupsAPI.readOptions).toHaveBeenCalled();
+    expect(InstanceGroupsAPI.readOptions).toHaveBeenCalledTimes(1);
   });
 
   test('handleCancel returns the user to container group detail', async () => {

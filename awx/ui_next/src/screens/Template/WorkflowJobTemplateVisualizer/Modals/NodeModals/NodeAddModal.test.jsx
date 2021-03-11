@@ -1,9 +1,6 @@
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import {
-  mountWithContexts,
-  waitForElement,
-} from '../../../../../../testUtils/enzymeHelpers';
+import { mountWithContexts } from '../../../../../../testUtils/enzymeHelpers';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -16,9 +13,6 @@ const nodeResource = {
   id: 448,
   type: 'job_template',
   name: 'Test JT',
-  summary_fields: {
-    credentials: [],
-  },
 };
 
 const workflowContext = {
@@ -26,37 +20,23 @@ const workflowContext = {
 };
 
 describe('NodeAddModal', () => {
-  test('Node modal confirmation dispatches as expected', async () => {
+  test('Node modal confirmation dispatches as expected', () => {
     const wrapper = mountWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider value={workflowContext}>
-          <NodeAddModal onSave={() => {}} askLinkType title="Add Node" />
+          <NodeAddModal />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
-    waitForElement(
-      wrapper,
-      'WizardNavItem[content="ContentLoading"]',
-      el => el.length === 0
-    );
-    await act(async () => {
-      wrapper.find('NodeModal').prop('onSave')(
-        { linkType: 'success', nodeResource },
-        {}
-      );
+    act(() => {
+      wrapper.find('NodeModal').prop('onSave')(nodeResource, 'success');
     });
-
     expect(dispatch).toHaveBeenCalledWith({
+      type: 'CREATE_NODE',
       node: {
         linkType: 'success',
-        nodeResource: {
-          id: 448,
-          name: 'Test JT',
-          summary_fields: { credentials: [] },
-          type: 'job_template',
-        },
+        nodeResource,
       },
-      type: 'CREATE_NODE',
     });
   });
 });

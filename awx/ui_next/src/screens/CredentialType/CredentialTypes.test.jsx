@@ -4,10 +4,6 @@ import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
 import CredentialTypes from './CredentialTypes';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<CredentialTypes/>', () => {
   let pageWrapper;
   let pageSections;

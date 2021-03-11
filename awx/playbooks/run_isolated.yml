@@ -13,10 +13,6 @@
     - ansible.posix
 
   tasks:
-    - name: "Output job the playbook is running for"
-      debug:
-        msg: "Checking on job {{ job_id }}"
-
     - name: synchronize job environment with isolated host
       synchronize:
         copy_links: true

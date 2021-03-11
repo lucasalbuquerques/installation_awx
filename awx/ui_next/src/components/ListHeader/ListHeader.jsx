@@ -85,12 +85,7 @@ class ListHeader extends React.Component {
   pushHistoryState(params) {
     const { history, qsConfig } = this.props;
     const { pathname } = history.location;
-    const nonNamespacedParams = parseQueryString({}, history.location.search);
-    const encodedParams = encodeNonDefaultQueryString(
-      qsConfig,
-      params,
-      nonNamespacedParams
-    );
+    const encodedParams = encodeNonDefaultQueryString(qsConfig, params);
     history.push(encodedParams ? `${pathname}?${encodedParams}` : pathname);
   }
 
@@ -152,14 +147,13 @@ ListHeader.propTypes = {
   searchColumns: SearchColumns.isRequired,
   searchableKeys: PropTypes.arrayOf(PropTypes.string),
   relatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
-  sortColumns: SortColumns,
+  sortColumns: SortColumns.isRequired,
   renderToolbar: PropTypes.func,
 };
 
 ListHeader.defaultProps = {
   renderToolbar: props => <DataListToolbar {...props} />,
   searchableKeys: [],
-  sortColumns: null,
   relatedSearchableKeys: [],
 };
 

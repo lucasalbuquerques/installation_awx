@@ -140,10 +140,6 @@ The offline installer needs to have functionality confirmed before upgrading the
 Versions need to match the versions used in the pip bootstrapping step
 in the top-level Makefile.
 
-### cryptography
-
-The offline installer needs to have functionality confirmed before upgrading these.
-
 ## Library Notes
 
 ### pexpect

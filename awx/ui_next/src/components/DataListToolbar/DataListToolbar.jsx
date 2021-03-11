@@ -93,11 +93,9 @@ function DataListToolbar({
               onRemove={onRemove}
             />
           </ToolbarItem>
-          {sortColumns && (
-            <ToolbarItem>
-              <Sort qsConfig={qsConfig} columns={sortColumns} onSort={onSort} />
-            </ToolbarItem>
-          )}
+          <ToolbarItem>
+            <Sort qsConfig={qsConfig} columns={sortColumns} onSort={onSort} />
+          </ToolbarItem>
         </ToolbarToggleGroup>
         {showExpandCollapse && (
           <ToolbarGroup>
@@ -159,7 +157,7 @@ DataListToolbar.propTypes = {
   searchColumns: SearchColumns.isRequired,
   searchableKeys: PropTypes.arrayOf(PropTypes.string),
   relatedSearchableKeys: PropTypes.arrayOf(PropTypes.string),
-  sortColumns: SortColumns,
+  sortColumns: SortColumns.isRequired,
   showSelectAll: PropTypes.bool,
   isAllSelected: PropTypes.bool,
   isCompact: PropTypes.bool,
@@ -176,7 +174,6 @@ DataListToolbar.defaultProps = {
   itemCount: 0,
   searchableKeys: [],
   relatedSearchableKeys: [],
-  sortColumns: null,
   clearAllFilters: null,
   showSelectAll: false,
   isAllSelected: false,

@@ -8,7 +8,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{ fullUnifiedJobTemplate: { type: 'job_template' } }}
+          node={{ unifiedJobTemplate: { type: 'job_template' } }}
         />
       </svg>
     );
@@ -19,7 +19,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{ fullUnifiedJobTemplate: { unified_job_type: 'job' } }}
+          node={{ unifiedJobTemplate: { unified_job_type: 'job' } }}
         />
       </svg>
     );
@@ -30,7 +30,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{ fullUnifiedJobTemplate: { type: 'project' } }}
+          node={{ unifiedJobTemplate: { type: 'project' } }}
         />
       </svg>
     );
@@ -41,9 +41,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{
-            fullUnifiedJobTemplate: { unified_job_type: 'project_update' },
-          }}
+          node={{ unifiedJobTemplate: { unified_job_type: 'project_update' } }}
         />
       </svg>
     );
@@ -54,7 +52,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{ fullUnifiedJobTemplate: { type: 'inventory_source' } }}
+          node={{ unifiedJobTemplate: { type: 'inventory_source' } }}
         />
       </svg>
     );
@@ -66,7 +64,7 @@ describe('WorkflowNodeTypeLetter', () => {
       <svg>
         <WorkflowNodeTypeLetter
           node={{
-            fullUnifiedJobTemplate: { unified_job_type: 'inventory_update' },
+            unifiedJobTemplate: { unified_job_type: 'inventory_update' },
           }}
         />
       </svg>
@@ -78,7 +76,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{ fullUnifiedJobTemplate: { type: 'workflow_job_template' } }}
+          node={{ unifiedJobTemplate: { type: 'workflow_job_template' } }}
         />
       </svg>
     );
@@ -89,9 +87,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{
-            fullUnifiedJobTemplate: { unified_job_type: 'workflow_job' },
-          }}
+          node={{ unifiedJobTemplate: { unified_job_type: 'workflow_job' } }}
         />
       </svg>
     );
@@ -102,9 +98,7 @@ describe('WorkflowNodeTypeLetter', () => {
     const wrapper = mount(
       <svg>
         <WorkflowNodeTypeLetter
-          node={{
-            fullUnifiedJobTemplate: { type: 'workflow_approval_template' },
-          }}
+          node={{ unifiedJobTemplate: { type: 'workflow_approval_template' } }}
         />
       </svg>
     );
@@ -116,7 +110,7 @@ describe('WorkflowNodeTypeLetter', () => {
       <svg>
         <WorkflowNodeTypeLetter
           node={{
-            fullUnifiedJobTemplate: { unified_job_type: 'workflow_approval' },
+            unifiedJobTemplate: { unified_job_type: 'workflow_approval' },
           }}
         />
       </svg>

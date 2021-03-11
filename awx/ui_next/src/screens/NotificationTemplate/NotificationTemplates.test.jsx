@@ -2,10 +2,6 @@ import React from 'react';
 import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 import NotificationTemplates from './NotificationTemplates';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<NotificationTemplates />', () => {
   let pageWrapper;
   let pageSections;

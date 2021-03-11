@@ -2,20 +2,12 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { createMemoryHistory } from 'history';
 import { mountWithContexts } from '../../../../testUtils/enzymeHelpers';
-import { SettingsProvider } from '../../../contexts/Settings';
 import { SettingsAPI } from '../../../api';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
 import TACACS from './TACACS';
 
 jest.mock('../../../api/models/Settings');
 SettingsAPI.readCategory.mockResolvedValue({
-  data: {
-    TACACSPLUS_HOST: 'mockhost',
-    TACACSPLUS_PORT: 49,
-    TACACSPLUS_SECRET: '$encrypted$',
-    TACACSPLUS_SESSION_TIMEOUT: 5,
-    TACACSPLUS_AUTH_PROTOCOL: 'ascii',
-  },
+  data: {},
 });
 
 describe('<TACACS />', () => {
@@ -31,14 +23,9 @@ describe('<TACACS />', () => {
       initialEntries: ['/settings/tacacs/details'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <TACACS />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
+      wrapper = mountWithContexts(<TACACS />, {
+        context: { router: { history } },
+      });
     });
     expect(wrapper.find('TACACSDetail').length).toBe(1);
   });
@@ -48,14 +35,9 @@ describe('<TACACS />', () => {
       initialEntries: ['/settings/tacacs/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <TACACS />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
+      wrapper = mountWithContexts(<TACACS />, {
+        context: { router: { history } },
+      });
     });
     expect(wrapper.find('TACACSEdit').length).toBe(1);
   });

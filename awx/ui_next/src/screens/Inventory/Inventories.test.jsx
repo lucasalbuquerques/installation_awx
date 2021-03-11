@@ -4,10 +4,6 @@ import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
 import Inventories from './Inventories';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<Inventories />', () => {
   let pageWrapper;
 

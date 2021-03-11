@@ -29,41 +29,27 @@ function NotificationTemplatesList({ i18n }) {
   const addUrl = `${match.url}/add`;
 
   const {
-    result: {
-      templates,
-      count,
-      actions,
-      relatedSearchableKeys,
-      searchableKeys,
-    },
+    result: { templates, count, actions },
     error: contentError,
     isLoading: isTemplatesLoading,
     request: fetchTemplates,
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const [response, actionsResponse] = await Promise.all([
+      const responses = await Promise.all([
         NotificationTemplatesAPI.read(params),
         NotificationTemplatesAPI.readOptions(),
       ]);
       return {
-        templates: response.data.results,
-        count: response.data.count,
-        actions: actionsResponse.data.actions,
-        relatedSearchableKeys: (
-          actionsResponse.data?.related_search_fields || []
-        ).map(val => val.slice(0, -8)),
-        searchableKeys: Object.keys(
-          actionsResponse.data.actions?.GET || {}
-        ).filter(key => actionsResponse.data.actions?.GET[key].filterable),
+        templates: responses[0].data.results,
+        count: responses[0].data.count,
+        actions: responses[1].data.actions,
       };
     }, [location]),
     {
       templates: [],
       count: 0,
       actions: {},
-      relatedSearchableKeys: [],
-      searchableKeys: [],
     }
   );
 
@@ -123,7 +109,7 @@ function NotificationTemplatesList({ i18n }) {
                 key: 'description__icontains',
               },
               {
-                name: i18n._(t`Notification type`),
+                name: i18n._(t`Type`),
                 key: 'or__notification_type',
                 options: [
                   ['email', i18n._(t`Email`)],
@@ -139,16 +125,14 @@ function NotificationTemplatesList({ i18n }) {
                 ],
               },
               {
-                name: i18n._(t`Created by (username)`),
+                name: i18n._(t`Created By (Username)`),
                 key: 'created_by__username__icontains',
               },
               {
-                name: i18n._(t`Modified by (username)`),
+                name: i18n._(t`Modified By (Username)`),
                 key: 'modified_by__username__icontains',
               },
             ]}
-            toolbarSearchableKeys={searchableKeys}
-            toolbarRelatedSearchableKeys={relatedSearchableKeys}
             toolbarSortColumns={[
               {
                 name: i18n._(t`Name`),
@@ -182,7 +166,6 @@ function NotificationTemplatesList({ i18n }) {
             renderItem={template => (
               <NotificationTemplateListItem
                 key={template.id}
-                fetchTemplates={fetchTemplates}
                 template={template}
                 detailUrl={`${match.url}/${template.id}`}
                 isSelected={selected.some(row => row.id === template.id)}

@@ -78,7 +78,7 @@ function CredentialDetail({ i18n, credential }) {
           {}
         ),
       };
-    }, [credentialId, credential_type.id]),
+    }, [credentialId, credential_type]),
     {
       fields: [],
       managedByTower: true,

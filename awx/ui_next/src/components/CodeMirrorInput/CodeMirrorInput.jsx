@@ -6,7 +6,6 @@ import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/yaml/yaml';
 import 'codemirror/mode/jinja2/jinja2';
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/addon/display/placeholder';
 
 const LINE_HEIGHT = 24;
 const PADDING = 12;
@@ -56,17 +55,6 @@ const CodeMirror = styled(ReactCodeMirror)`
       background-color: var(--pf-c-form-control--disabled--BackgroundColor);
     }
   `}
-  ${props =>
-    props.options &&
-    props.options.placeholder &&
-    `
-    .CodeMirror-empty {
-      pre.CodeMirror-placeholder {
-        color: var(--pf-c-form-control--placeholder--Color);
-        height: 100% !important;
-      }
-    }
-  `}
 `;
 
 function CodeMirrorInput({
@@ -78,7 +66,6 @@ function CodeMirrorInput({
   rows,
   fullHeight,
   className,
-  placeholder,
 }) {
   // Workaround for CodeMirror bug: If CodeMirror renders in a modal on the
   // modal's initial render, it appears as an empty box due to mis-calculated
@@ -105,7 +92,6 @@ function CodeMirrorInput({
         smartIndent: false,
         lineNumbers: true,
         lineWrapping: true,
-        placeholder,
         readOnly,
       }}
       fullHeight={fullHeight}

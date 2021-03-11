@@ -79,9 +79,8 @@ function VisualizerToolbar({
           <Badge id="visualizer-total-nodes-badge" isRead>
             {totalNodes}
           </Badge>
-          <Tooltip content={i18n._(t`Toggle legend`)} position="bottom">
+          <Tooltip content={i18n._(t`Toggle Legend`)} position="bottom">
             <ActionButton
-              aria-label={i18n._(t`Toggle legend`)}
               id="visualizer-toggle-legend"
               isActive={totalNodes > 0 && showLegend}
               isDisabled={totalNodes === 0}
@@ -91,9 +90,8 @@ function VisualizerToolbar({
               <CompassIcon />
             </ActionButton>
           </Tooltip>
-          <Tooltip content={i18n._(t`Toggle tools`)} position="bottom">
+          <Tooltip content={i18n._(t`Toggle Tools`)} position="bottom">
             <ActionButton
-              aria-label={i18n._(t`Toggle tools`)}
               id="visualizer-toggle-tools"
               isActive={totalNodes > 0 && showTools}
               isDisabled={totalNodes === 0}
@@ -103,43 +101,33 @@ function VisualizerToolbar({
               <WrenchIcon />
             </ActionButton>
           </Tooltip>
-          <Tooltip
-            content={i18n._(t`Workflow documentation`)}
-            position="bottom"
+          <ActionButton
+            aria-label={i18n._(t`Workflow Documentation`)}
+            id="visualizer-documentation"
+            variant="plain"
+            component="a"
+            target="_blank"
+            href={DOCLINK}
           >
-            <ActionButton
-              aria-label={i18n._(t`Workflow documentation`)}
-              id="visualizer-documentation"
-              variant="plain"
-              component="a"
-              target="_blank"
-              href={DOCLINK}
-            >
-              <BookIcon />
-            </ActionButton>
-          </Tooltip>
+            <BookIcon />
+          </ActionButton>
           {template.summary_fields?.user_capabilities?.start && (
-            <Tooltip content={i18n._(t`Launch workflow`)} position="bottom">
-              <LaunchButton
-                resource={template}
-                aria-label={i18n._(t`Launch workflow`)}
-              >
-                {({ handleLaunch }) => (
-                  <ActionButton
-                    id="visualizer-launch"
-                    variant="plain"
-                    isDisabled={hasUnsavedChanges || totalNodes === 0}
-                    onClick={handleLaunch}
-                  >
-                    <RocketIcon />
-                  </ActionButton>
-                )}
-              </LaunchButton>
-            </Tooltip>
+            <LaunchButton resource={template} aria-label={i18n._(t`Launch`)}>
+              {({ handleLaunch }) => (
+                <ActionButton
+                  id="visualizer-launch"
+                  variant="plain"
+                  isDisabled={hasUnsavedChanges || totalNodes === 0}
+                  onClick={handleLaunch}
+                >
+                  <RocketIcon />
+                </ActionButton>
+              )}
+            </LaunchButton>
           )}
           {!readOnly && (
             <>
-              <Tooltip content={i18n._(t`Delete all nodes`)} position="bottom">
+              <Tooltip content={i18n._(t`Delete All Nodes`)} position="bottom">
                 <ActionButton
                   id="visualizer-delete-all"
                   aria-label={i18n._(t`Delete all nodes`)}

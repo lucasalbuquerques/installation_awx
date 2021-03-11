@@ -144,7 +144,6 @@ function ResourceAccessList({ i18n, apiModel, resource }) {
               setDeletionRole(role);
               setShowDeleteModal(true);
             }}
-            i18n={i18n}
           />
         )}
       />
@@ -156,7 +155,6 @@ function ResourceAccessList({ i18n, apiModel, resource }) {
             fetchAccessRecords();
           }}
           roles={resource.summary_fields.object_roles}
-          resource={resource}
         />
       )}
       {showDeleteModal && (

@@ -62,7 +62,7 @@ function ScheduleList({
           scheduleActions.data.actions?.GET || {}
         ).filter(key => scheduleActions.data.actions?.GET[key].filterable),
       };
-    }, [location.search, loadSchedules, loadScheduleOptions]),
+    }, [location, loadSchedules, loadScheduleOptions]),
     {
       schedules: [],
       itemCount: 0,

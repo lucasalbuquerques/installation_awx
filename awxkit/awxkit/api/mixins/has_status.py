@@ -47,13 +47,6 @@ class HasStatus(object):
     def wait_until_started(self, interval=1, timeout=60):
         return self.wait_until_status(self.started_statuses, interval=interval, timeout=timeout)
 
-    def failure_output_details(self):
-        if getattr(self, 'result_stdout', ''):
-            output = bytes_to_str(self.result_stdout)
-            if output:
-                return '\nstdout:\n{}'.format(output)
-        return ''
-
     def assert_status(self, status_list, msg=None):
         if isinstance(status_list, str):
             status_list = [status_list]
@@ -72,9 +65,10 @@ class HasStatus(object):
             msg += '\njob_explanation: {}'.format(bytes_to_str(self.job_explanation))
         if getattr(self, 'result_traceback', ''):
             msg += '\nresult_traceback:\n{}'.format(bytes_to_str(self.result_traceback))
-
-        msg += self.failure_output_details()
-
+        if getattr(self, 'result_stdout', ''):
+            output = bytes_to_str(self.result_stdout)
+            if output:
+                msg = msg + '\nstdout:\n{}'.format(output)
         if getattr(self, 'job_explanation', '').startswith('Previous Task Failed'):
             try:
                 data = json.loads(self.job_explanation.replace('Previous Task Failed: ', ''))

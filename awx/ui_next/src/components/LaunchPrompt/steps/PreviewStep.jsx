@@ -6,10 +6,8 @@ import { t } from '@lingui/macro';
 import { useFormikContext } from 'formik';
 import { withI18n } from '@lingui/react';
 import yaml from 'js-yaml';
-import mergeExtraVars, {
-  maskPasswords,
-} from '../../../util/prompt/mergeExtraVars';
-import getSurveyValues from '../../../util/prompt/getSurveyValues';
+import mergeExtraVars, { maskPasswords } from '../mergeExtraVars';
+import getSurveyValues from '../getSurveyValues';
 import PromptDetail from '../../PromptDetail';
 
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
@@ -25,25 +23,18 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 10px;
 `;
 
-function PreviewStep({
-  resource,
-  launchConfig,
-  surveyConfig,
-  formErrors,
-  i18n,
-}) {
+function PreviewStep({ resource, config, survey, formErrors, i18n }) {
   const { values } = useFormikContext();
   const surveyValues = getSurveyValues(values);
 
-  const overrides = {
-    ...values,
-  };
+  const overrides = { ...values };
 
-  if (launchConfig.ask_variables_on_launch || launchConfig.survey_enabled) {
-    const initialExtraVars =
-      launchConfig.ask_variables_on_launch && (overrides.extra_vars || '---');
-    if (surveyConfig?.spec) {
-      const passwordFields = surveyConfig.spec
+  if (config.ask_variables_on_launch || config.survey_enabled) {
+    const initialExtraVars = config.ask_variables_on_launch
+      ? values.extra_vars || '---'
+      : resource.extra_vars;
+    if (survey && survey.spec) {
+      const passwordFields = survey.spec
         .filter(q => q.type === 'password')
         .map(q => q.variable);
       const masked = maskPasswords(surveyValues, passwordFields);
@@ -51,9 +42,7 @@ function PreviewStep({
         mergeExtraVars(initialExtraVars, masked)
       );
     } else {
-      overrides.extra_vars = yaml.safeDump(
-        mergeExtraVars(initialExtraVars, {})
-      );
+      overrides.extra_vars = initialExtraVars;
     }
   }
 
@@ -73,7 +62,7 @@ function PreviewStep({
       )}
       <PromptDetail
         resource={resource}
-        launchConfig={launchConfig}
+        launchConfig={config}
         overrides={overrides}
       />
     </Fragment>

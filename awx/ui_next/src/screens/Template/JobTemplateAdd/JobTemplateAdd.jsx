@@ -83,7 +83,6 @@ function JobTemplateAdd() {
             handleCancel={handleCancel}
             handleSubmit={handleSubmit}
             submitError={formSubmitError}
-            isOverrideDisabledLookup
           />
         </CardBody>
       </Card>

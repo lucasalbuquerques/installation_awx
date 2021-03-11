@@ -18,7 +18,6 @@ const QS_CONFIG = getQSConfig('project', {
   page: 1,
   page_size: 5,
   order_by: 'name',
-  role_level: 'use_role',
 });
 
 function ProjectLookup({
@@ -32,7 +31,6 @@ function ProjectLookup({
   value,
   onBlur,
   history,
-  isOverrideDisabled,
 }) {
   const autoPopulateLookup = useAutoPopulateLookup(onChange);
   const {
@@ -59,10 +57,8 @@ function ProjectLookup({
         searchableKeys: Object.keys(
           actionsResponse.data.actions?.GET || {}
         ).filter(key => actionsResponse.data.actions?.GET[key].filterable),
-        canEdit:
-          Boolean(actionsResponse.data.actions.POST) || isOverrideDisabled,
+        canEdit: Boolean(actionsResponse.data.actions.POST),
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [autoPopulate, autoPopulateLookup, history.location.search]),
     {
       count: 0,
@@ -164,7 +160,6 @@ ProjectLookup.propTypes = {
   required: bool,
   tooltip: string,
   value: Project,
-  isOverrideDisabled: bool,
 };
 
 ProjectLookup.defaultProps = {
@@ -175,7 +170,6 @@ ProjectLookup.defaultProps = {
   required: false,
   tooltip: '',
   value: null,
-  isOverrideDisabled: false,
 };
 
 export { ProjectLookup as _ProjectLookup };

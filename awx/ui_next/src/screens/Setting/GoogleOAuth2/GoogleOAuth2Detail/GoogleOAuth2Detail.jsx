@@ -78,7 +78,6 @@ function GoogleOAuth2Detail({ i18n }) {
             <Button
               aria-label={i18n._(t`Edit`)}
               component={Link}
-              ouiaId="edit-button"
               to="/settings/google_oauth2/edit"
             >
               {i18n._(t`Edit`)}

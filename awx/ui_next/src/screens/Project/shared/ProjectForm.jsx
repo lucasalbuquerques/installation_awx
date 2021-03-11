@@ -284,11 +284,11 @@ function ProjectFormFields({
                 data={[
                   {
                     label: i18n._(t`Use Default Ansible Environment`),
-                    value: '/var/lib/awx/venv/ansible/',
+                    value: '/venv/ansible/',
                     key: 'default',
                   },
                   ...custom_virtualenvs
-                    .filter(datum => datum !== '/var/lib/awx/venv/ansible/')
+                    .filter(datum => datum !== '/venv/ansible/')
                     .map(datum => ({
                       label: datum,
                       value: datum,
@@ -310,17 +310,7 @@ function ProjectForm({ i18n, project, submitError, ...props }) {
   const { summary_fields = {} } = project;
   const [contentError, setContentError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [scmSubFormState, setScmSubFormState] = useState({
-    scm_url: '',
-    scm_branch: '',
-    scm_refspec: '',
-    credential: '',
-    scm_clean: false,
-    scm_delete_on_update: false,
-    scm_update_on_launch: false,
-    allow_override: false,
-    scm_update_cache_timeout: 0,
-  });
+  const [scmSubFormState, setScmSubFormState] = useState(null);
   const [scmTypeOptions, setScmTypeOptions] = useState(null);
   const [credentials, setCredentials] = useState({
     scm: { typeId: null, value: null },

@@ -5,7 +5,7 @@ import { t } from '@lingui/macro';
 import NotificationTemplateList from './NotificationTemplateList';
 import NotificationTemplateAdd from './NotificationTemplateAdd';
 import NotificationTemplate from './NotificationTemplate';
-import ScreenHeader from '../../components/ScreenHeader/ScreenHeader';
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 
 function NotificationTemplates({ i18n }) {
   const match = useRouteMatch();
@@ -32,10 +32,7 @@ function NotificationTemplates({ i18n }) {
 
   return (
     <>
-      <ScreenHeader
-        streamType="notification_template"
-        breadcrumbConfig={breadcrumbConfig}
-      />
+      <Breadcrumbs breadcrumbConfig={breadcrumbConfig} />
       <Switch>
         <Route path={`${match.url}/add`}>
           <NotificationTemplateAdd />

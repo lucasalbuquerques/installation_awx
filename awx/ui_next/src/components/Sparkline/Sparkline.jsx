@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { arrayOf } from 'prop-types';
+import { arrayOf, object } from 'prop-types';
 import { withI18n } from '@lingui/react';
 import { Link as _Link } from 'react-router-dom';
 import { Tooltip } from '@patternfly/react-core';
@@ -8,7 +8,6 @@ import { t } from '@lingui/macro';
 import StatusIcon from '../StatusIcon';
 import { formatDateString } from '../../util/dates';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
-import { Job } from '../../types';
 
 /* eslint-disable react/jsx-pascal-case */
 const Link = styled(props => <_Link {...props} />)`
@@ -17,7 +16,6 @@ const Link = styled(props => <_Link {...props} />)`
 
 const Wrapper = styled.div`
   display: inline-flex;
-  flex-wrap: wrap;
 `;
 /* eslint-enable react/jsx-pascal-case */
 
@@ -53,7 +51,7 @@ const Sparkline = ({ i18n, jobs }) => {
 };
 
 Sparkline.propTypes = {
-  jobs: arrayOf(Job),
+  jobs: arrayOf(object),
 };
 Sparkline.defaultProps = {
   jobs: [],

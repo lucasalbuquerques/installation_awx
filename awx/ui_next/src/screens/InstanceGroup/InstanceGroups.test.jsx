@@ -4,10 +4,6 @@ import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
 import InstanceGroups from './InstanceGroups';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<InstanceGroups/>', () => {
   let pageWrapper;
   let pageSections;

@@ -44,7 +44,7 @@ services:
 
   # Postgres Database Container
   postgres:
-    image: postgres:12
+    image: postgres:10
     container_name: tools_postgres_1
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust

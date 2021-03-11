@@ -4,7 +4,7 @@ import { withI18n } from '@lingui/react';
 import { t } from '@lingui/macro';
 import WorkflowApprovalList from './WorkflowApprovalList';
 import WorkflowApproval from './WorkflowApproval';
-import ScreenHeader from '../../components/ScreenHeader/ScreenHeader';
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 
 function WorkflowApprovals({ i18n }) {
   const match = useRouteMatch();
@@ -26,10 +26,7 @@ function WorkflowApprovals({ i18n }) {
 
   return (
     <>
-      <ScreenHeader
-        streamType="workflow_approval"
-        breadcrumbConfig={breadcrumbConfig}
-      />
+      <Breadcrumbs breadcrumbConfig={breadcrumbConfig} />
       <Switch>
         <Route path={`${match.url}/:id`}>
           <WorkflowApproval setBreadcrumb={updateBreadcrumbConfig} />

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withI18n } from '@lingui/react';
@@ -32,15 +32,27 @@ const Expandable = styled(PFExpandable)`
   }
 `;
 
-function ErrorDetail({ error, i18n }) {
-  const { response } = error;
-  const [isExpanded, setIsExpanded] = useState(false);
+class ErrorDetail extends Component {
+  constructor(props) {
+    super(props);
 
-  const handleToggle = () => {
-    setIsExpanded(!isExpanded);
-  };
+    this.state = {
+      isExpanded: false,
+    };
 
-  const renderNetworkError = () => {
+    this.handleToggle = this.handleToggle.bind(this);
+    this.renderNetworkError = this.renderNetworkError.bind(this);
+    this.renderStack = this.renderStack.bind(this);
+  }
+
+  handleToggle() {
+    const { isExpanded } = this.state;
+    this.setState({ isExpanded: !isExpanded });
+  }
+
+  renderNetworkError() {
+    const { error } = this.props;
+    const { response } = error;
     const message = getErrorMessage(response);
 
     return (
@@ -62,25 +74,31 @@ function ErrorDetail({ error, i18n }) {
         </CardBody>
       </Fragment>
     );
-  };
+  }
 
-  const renderStack = () => {
+  renderStack() {
+    const { error } = this.props;
     return <CardBody>{error.stack}</CardBody>;
-  };
+  }
 
-  return (
-    <Expandable
-      toggleText={i18n._(t`Details`)}
-      onToggle={handleToggle}
-      isExpanded={isExpanded}
-    >
-      <Card>
-        {Object.prototype.hasOwnProperty.call(error, 'response')
-          ? renderNetworkError()
-          : renderStack()}
-      </Card>
-    </Expandable>
-  );
+  render() {
+    const { isExpanded } = this.state;
+    const { error, i18n } = this.props;
+
+    return (
+      <Expandable
+        toggleText={i18n._(t`Details`)}
+        onToggle={this.handleToggle}
+        isExpanded={isExpanded}
+      >
+        <Card>
+          {Object.prototype.hasOwnProperty.call(error, 'response')
+            ? this.renderNetworkError()
+            : this.renderStack()}
+        </Card>
+      </Expandable>
+    );
+  }
 }
 
 ErrorDetail.propTypes = {

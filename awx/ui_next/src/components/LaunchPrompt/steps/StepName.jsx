@@ -14,13 +14,13 @@ const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
   margin-left: 10px;
 `;
 
-function StepName({ hasErrors, children, i18n, id }) {
+function StepName({ hasErrors, children, i18n }) {
   if (!hasErrors) {
-    return <div id={id}>{children}</div>;
+    return children;
   }
   return (
     <>
-      <AlertText id={id}>
+      <AlertText>
         {children}
         <Tooltip
           position="right"

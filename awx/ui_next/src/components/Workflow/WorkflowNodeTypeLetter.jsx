@@ -19,27 +19,16 @@ const CenteredPauseIcon = styled(PauseIcon)`
 `;
 
 function WorkflowNodeTypeLetter({ node }) {
-  if (
-    !node?.fullUnifiedJobTemplate &&
-    !node?.originalNodeObject?.summary_fields?.unified_job_template
-  ) {
-    return null;
-  }
-
-  const unifiedJobTemplate =
-    node?.fullUnifiedJobTemplate ||
-    node?.originalNodeObject?.summary_fields?.unified_job_template;
-
   let nodeTypeLetter;
   if (
-    unifiedJobTemplate.type ||
-    unifiedJobTemplate.unified_job_type ||
-    node?.job?.type
+    (node.unifiedJobTemplate &&
+      (node.unifiedJobTemplate.type ||
+        node.unifiedJobTemplate.unified_job_type)) ||
+    (node.job && node.job.type)
   ) {
-    const ujtType =
-      unifiedJobTemplate.type ||
-      unifiedJobTemplate.unified_job_type ||
-      node.job.type;
+    const ujtType = node.unifiedJobTemplate
+      ? node.unifiedJobTemplate.type || node.unifiedJobTemplate.unified_job_type
+      : node.job.type;
     switch (ujtType) {
       case 'job_template':
       case 'job':

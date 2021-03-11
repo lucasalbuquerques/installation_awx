@@ -37,12 +37,20 @@ describe('<UserTokenDetail/>', () => {
     description: 'cdfsg',
     scope: 'read',
   };
-  test('should render properly', async () => {
+  test('should call api for token details and actions', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
+      wrapper = mountWithContexts(
+        <UserTokenDetail canEditOrDelete token={token} />
+      );
     });
-
     expect(wrapper.find('UserTokenDetail').length).toBe(1);
+  });
+  test('should call api for token details and actions', async () => {
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <UserTokenDetail canEditOrDelete token={token} />
+      );
+    });
 
     expect(wrapper.find('Detail[label="Application"]').prop('value')).toBe(
       'hg'
@@ -57,11 +65,23 @@ describe('<UserTokenDetail/>', () => {
     expect(
       wrapper.find('UserDateDetail[label="Last Modified"]').prop('date')
     ).toBe('2020-06-23T19:56:38.441353Z');
+    expect(wrapper.find('Button[aria-label="Edit"]').length).toBe(1);
     expect(wrapper.find('Button[aria-label="Delete"]').length).toBe(1);
+  });
+  test('should not render edit or delete buttons', async () => {
+    await act(async () => {
+      wrapper = mountWithContexts(
+        <UserTokenDetail canEditOrDelete={false} token={token} />
+      );
+    });
+    expect(wrapper.find('Button[aria-label="Edit"]').length).toBe(0);
+    expect(wrapper.find('Button[aria-label="Delete"]').length).toBe(0);
   });
   test('should delete token properly', async () => {
     await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
+      wrapper = mountWithContexts(
+        <UserTokenDetail canEditOrDelete token={token} />
+      );
     });
     await act(async () =>
       wrapper.find('Button[aria-label="Delete"]').prop('onClick')()
@@ -70,7 +90,7 @@ describe('<UserTokenDetail/>', () => {
     await act(async () => wrapper.find('DeleteButton').prop('onConfirm')());
     expect(TokensAPI.destroy).toBeCalledWith(2);
   });
-  test('should display error on failed deletion', async () => {
+  test('should throw deletion error', async () => {
     TokensAPI.destroy.mockRejectedValue(
       new Error({
         response: {
@@ -84,7 +104,9 @@ describe('<UserTokenDetail/>', () => {
       })
     );
     await act(async () => {
-      wrapper = mountWithContexts(<UserTokenDetail token={token} />);
+      wrapper = mountWithContexts(
+        <UserTokenDetail canEditOrDelete token={token} />
+      );
     });
     await act(async () =>
       wrapper.find('Button[aria-label="Delete"]').prop('onClick')()

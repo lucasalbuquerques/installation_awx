@@ -6,8 +6,6 @@ import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from '../../../components/ContentError';
 import GitHubDetail from './GitHubDetail';
 import GitHubEdit from './GitHubEdit';
-import GitHubOrgEdit from './GitHubOrgEdit';
-import GitHubTeamEdit from './GitHubTeamEdit';
 
 function GitHub({ i18n }) {
   const baseURL = '/settings/github';
@@ -31,14 +29,8 @@ function GitHub({ i18n }) {
           <Route path={`${baseURL}/:category/details`}>
             <GitHubDetail />
           </Route>
-          <Route path={`${baseURL}/default/edit`}>
+          <Route path={`${baseURL}/:category/edit`}>
             <GitHubEdit />
-          </Route>
-          <Route path={`${baseURL}/organization/edit`}>
-            <GitHubOrgEdit />
-          </Route>
-          <Route path={`${baseURL}/team/edit`}>
-            <GitHubTeamEdit />
           </Route>
           <Route key="not-found" path={`${baseURL}/*`}>
             <ContentError isNotFound>

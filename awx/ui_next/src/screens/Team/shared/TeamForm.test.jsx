@@ -44,7 +44,7 @@ describe('<TeamForm />', () => {
       );
     });
 
-    await act(async () => {
+    act(() => {
       wrapper.find('input#team-name').simulate('change', {
         target: { value: 'new foo', name: 'name' },
       });

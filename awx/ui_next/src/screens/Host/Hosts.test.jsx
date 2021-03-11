@@ -5,10 +5,6 @@ import { mountWithContexts } from '../../../testUtils/enzymeHelpers';
 
 import Hosts from './Hosts';
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-}));
-
 describe('<Hosts />', () => {
   test('initially renders succesfully', () => {
     mountWithContexts(<Hosts />);
@@ -31,7 +27,7 @@ describe('<Hosts />', () => {
         },
       },
     });
-    expect(wrapper.find('Title').length).toBe(1);
+    expect(wrapper.find('BreadcrumbHeading').length).toBe(1);
     wrapper.unmount();
   });
 

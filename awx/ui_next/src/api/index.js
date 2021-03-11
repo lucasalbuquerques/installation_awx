@@ -1,4 +1,3 @@
-import ActivityStream from './models/ActivityStream';
 import AdHocCommands from './models/AdHocCommands';
 import Applications from './models/Applications';
 import Auth from './models/Auth';
@@ -40,7 +39,6 @@ import WorkflowJobTemplateNodes from './models/WorkflowJobTemplateNodes';
 import WorkflowJobTemplates from './models/WorkflowJobTemplates';
 import WorkflowJobs from './models/WorkflowJobs';
 
-const ActivityStreamAPI = new ActivityStream();
 const AdHocCommandsAPI = new AdHocCommands();
 const ApplicationsAPI = new Applications();
 const AuthAPI = new Auth();
@@ -83,7 +81,6 @@ const WorkflowJobTemplatesAPI = new WorkflowJobTemplates();
 const WorkflowJobsAPI = new WorkflowJobs();
 
 export {
-  ActivityStreamAPI,
   AdHocCommandsAPI,
   ApplicationsAPI,
   AuthAPI,

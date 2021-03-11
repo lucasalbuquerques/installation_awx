@@ -57,7 +57,7 @@ function AdHocCommands({ adHocItems, i18n, hasListItems }) {
     fetchData();
   }, [fetchData]);
   const {
-    isLoading: isLaunchLoading,
+    isloading: isLaunchLoading,
     error: launchError,
     request: launchAdHocCommands,
   } = useRequest(

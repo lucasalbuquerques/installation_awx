@@ -6,13 +6,12 @@ import {
   waitForElement,
 } from '../../../../testUtils/enzymeHelpers';
 import { SettingsAPI } from '../../../api';
-import { SettingsProvider } from '../../../contexts/Settings';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
-import mockLDAP from '../shared/data.ldapSettings.json';
 import LDAP from './LDAP';
 
 jest.mock('../../../api/models/Settings');
-SettingsAPI.readCategory.mockResolvedValue({ data: mockLDAP });
+SettingsAPI.readCategory.mockResolvedValue({
+  data: {},
+});
 
 describe('<LDAP />', () => {
   let wrapper;
@@ -40,14 +39,9 @@ describe('<LDAP />', () => {
       initialEntries: ['/settings/ldap/default/edit'],
     });
     await act(async () => {
-      wrapper = mountWithContexts(
-        <SettingsProvider value={mockAllOptions.actions}>
-          <LDAP />
-        </SettingsProvider>,
-        {
-          context: { router: { history } },
-        }
-      );
+      wrapper = mountWithContexts(<LDAP />, {
+        context: { router: { history } },
+      });
     });
     await waitForElement(wrapper, 'ContentLoading', el => el.length === 0);
     expect(wrapper.find('LDAPEdit').length).toBe(1);

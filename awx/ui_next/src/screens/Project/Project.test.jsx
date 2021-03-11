@@ -11,14 +11,6 @@ import mockDetails from './data.project.json';
 import Project from './Project';
 
 jest.mock('../../api');
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useRouteMatch: () => ({
-    pathname: '/projects/1/details',
-    url: '/projects/1',
-  }),
-  useParams: () => ({ id: 1 }),
-}));
 
 const mockMe = {
   is_super_user: true,
@@ -58,7 +50,7 @@ describe('<Project />', () => {
     });
     const tabs = await waitForElement(
       wrapper,
-      '.pf-c-tabs__item-text',
+      '.pf-c-tabs__item',
       el => el.length === 6
     );
     expect(tabs.at(3).text()).toEqual('Notifications');
@@ -79,7 +71,7 @@ describe('<Project />', () => {
     });
     const tabs = await waitForElement(
       wrapper,
-      '.pf-c-tabs__item-text',
+      '.pf-c-tabs__item',
       el => el.length === 5
     );
     tabs.forEach(tab => expect(tab.text()).not.toEqual('Notifications'));
@@ -99,6 +91,7 @@ describe('<Project />', () => {
         <Project setBreadcrumb={() => {}} me={mockMe} />
       );
     });
+
     const tabs = await waitForElement(
       wrapper,
       '.pf-c-tabs__item',
@@ -122,6 +115,7 @@ describe('<Project />', () => {
         <Project setBreadcrumb={() => {}} me={mockMe} />
       );
     });
+
     const tabs = await waitForElement(
       wrapper,
       '.pf-c-tabs__item',
